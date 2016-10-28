@@ -21,7 +21,7 @@ def make_artificial_datasets(t_dur = 100, delay = [10,20,30,40], prt= False):
             print('Y: %2d'%temp_out)
     return np.array(result, dtype=np.int32)
 
-def plot_np_array(np_array, t_direction_down=True ,dim=1, hidden_option=False):
+def plot_np_array_2d(np_array, t_direction_down=True, hidden_option=False):
     get_ipython().magic(u'matplotlib inline')
     import seaborn as sns
     import pandas as pd
@@ -35,11 +35,10 @@ def plot_np_array(np_array, t_direction_down=True ,dim=1, hidden_option=False):
         cat = np_array.shape[0]
     for i in range(cat):
         for j in range(time):
-            for k in range(dim):
-                if t_direction_down:
-                    data_list.append([np_array[j][i],i,j,k])
-                else:
-                    data_list.append([np_array[i][j],i,j,k])
+            if t_direction_down:
+                data_list.append([np_array[j][i],i,j,0])
+            else:
+                data_list.append([np_array[i][j],i,j,0])
     result = pd.DataFrame(data_list,columns = ['data','cat','time','dim'])
     if hidden_option:
         sns.plt.ylim(-2,12)
@@ -49,7 +48,7 @@ def plot_np_array(np_array, t_direction_down=True ,dim=1, hidden_option=False):
         return result
     
 def main():
-    plot_np_array(make_artificial_datasets())
+    plot_np_array_2d(make_artificial_datasets())
 
 if __name__ == '__main__':
     main()
