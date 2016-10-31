@@ -48,6 +48,8 @@ def plot_np_array_2d(np_array, t_direction_down=True, hidden_option=False):
         return result
     
 def main():
+    #Chainer Module Import
+    import train_ptb
     plot_np_array_2d(make_artificial_datasets())
 
 if __name__ == '__main__':
