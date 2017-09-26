@@ -56,6 +56,13 @@ def np_array_to_plot(array, axis = 0,dim =1, hidden_key = 0):
     if hidden_key:
         return result
     
+def readFile(path="./COP_Data.csv"):
+    with open(path) as f:
+        content = f.readlines()
+    
+    content = [a[0].split(",") for a in [x.strip().split("\n") for x in content]]
+    print content[1:5]
+    
 def main():
     X, Y = make_artificial_datasets(duration = 1000)
     np_array_to_plot(np.array([X.transpose()[0],X.transpose()[1], Y.transpose()[0]])[:,:50])
