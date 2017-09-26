@@ -69,7 +69,8 @@ def main():
     Y = Y.reshape(-1,time,y_dim)
     samples = X.shape[0]
     from keras.models import Sequential
-    from keras.layers.core import Dense, Activation, TimeDistributedDense
+    from keras.layers.core import Dense, Activation
+    from keras.layers.wrappers import TimeDistributed
     from keras.layers.recurrent import LSTM
     #from keras.optimizers import SGD
     hidden = 10
@@ -77,7 +78,7 @@ def main():
     model.add(LSTM(output_dim=hidden, return_sequences=True, stateful=True, init='uniform', 
                    batch_input_shape=(samples, time, x_dim)))
     model.add(LSTM(output_dim=hidden, return_sequences=True, stateful=True, init='uniform'))
-    model.add(TimeDistributedDense(output_dim=y_dim))
+    model.add(TimeDistributed(Dense(y_dim)))
     model.add(Activation('linear'))
     model.compile(loss='mean_squared_error', optimizer='rmsprop')
     #sgd = SGD(lr=0.1, decay=1e-4, momentum=0.2, nesterov=True)
@@ -104,5 +105,3 @@ def main():
         
 if __name__=='__main__':
     main()
-
-
