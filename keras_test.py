@@ -64,15 +64,16 @@ def readFile(path, row_start, column_start, output_border_start):
 
     
 def main():
-    X, Y = readFile(path="./COP_Data.csv", row_start=2, column_start=2, output_border_start=55)
-    x_dim = X.shape[1]
-    y_dim = Y.shape[1]
-    X = preprocessing.scale(X)
-    Y = preprocessing.scale(Y)
+    X_raw, Y_raw = readFile(path="./COP_Data.csv", row_start=2, column_start=2, output_border_start=55)
+    x_dim = X_raw.shape[1]
+    y_dim = Y_raw.shape[1]
+    X = preprocessing.scale(X_raw)
+    Y = preprocessing.scale(Y_raw)
     time = 100
-    cutoff = X.shape[0] / time
+    cutoff = X.shape[0] / (time * 2)
     X = X[:cutoff*time,:].reshape(-1,time,x_dim)
     Y = Y[:cutoff*time,:].reshape(-1,time,y_dim)
+    print X.shape, Y.shape
     samples = X.shape[0]
     from keras.models import Sequential
     from keras.layers.core import Dense, Activation
@@ -90,7 +91,7 @@ def main():
     #sgd = SGD(lr=0.1, decay=1e-4, momentum=0.2, nesterov=True)
     #model.compile(loss='mean_squared_error', optimizer=sgd)
     model.fit(X, Y, batch_size=samples, nb_epoch=1000)
-    X_test, Y_test_origin = X[-time:,:].reshape(-1,time,x_dim), Y[-time:,:].reshape(-1,time,y_dim)
+    X_test, Y_test_origin = X_raw[-cutoff*time:,:], Y_raw[-cutoff*time:,:]
     X_test = preprocessing.scale(X_test)
     Y_test = preprocessing.scale(Y_test_origin)
     X_test = X_test.reshape(-1,time,x_dim)
